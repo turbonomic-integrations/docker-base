@@ -4,7 +4,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'ls -alh'
-                sh 'docker build -t turbointegrations/base:latest .'
+                sh 'docker build -f Dockerfile.alpine -t turbointegrations/base:0.1-alpine .'
+                sh 'docker build -f Dockerfile.slim-buster -t turbointegrations/base:0.1-slim-buster .'
             }
         }
         
@@ -12,7 +13,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DHPASS', usernameVariable: 'DHUSER')]) {
                     sh 'docker login -u $DHUSER -p $DHPASS'
-                    sh 'docker push turbointegrations/base:latest'
+                    sh 'docker push turbointegrations/base:0.1-alpine'
+                    sh 'docker push turbointegrations/base:0.1-slim-buster'
                 }
             }
         }
