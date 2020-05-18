@@ -6,6 +6,7 @@ pipeline {
                 sh 'ls -alh'
                 sh 'docker build -f Dockerfile.alpine -t turbointegrations/base:0.1-alpine .'
                 sh 'docker build -f Dockerfile.slim-buster -t turbointegrations/base:0.1-slim-buster .'
+                sh 'docker build -f Dockerfile.rhel -t turbointegrations/base:0.1-rhel .'
             }
         }
         
@@ -15,6 +16,7 @@ pipeline {
                     sh 'docker login -u $DHUSER -p $DHPASS'
                     sh 'docker push turbointegrations/base:0.1-alpine'
                     sh 'docker push turbointegrations/base:0.1-slim-buster'
+                    sh 'docker push turbointegrations/base:0.1-rhel'
                 }
             }
         }
