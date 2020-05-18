@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi8/python-38
+FROM registry.access.redhat.com/ubi8/python-38
 
 ADD https://github.com/rastern/vmt-connect/archive/v3.2.1.tar.gz /tmp/vmtconnect.tar.gz
 ADD https://github.com/turbonomic/vmt-plan/releases/download/v2.0.4/vmtplan-2.0.4-py3-none-any.whl /tmp/vmtplan-2.0.4-py3-none-any.whl
