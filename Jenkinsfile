@@ -1,12 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/turbo-integrations/docker-base.git'
-            }
-        }
-        
         stage('Build') {
             steps {
                 sh 'ls -alh'
