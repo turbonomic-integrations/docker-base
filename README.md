@@ -16,12 +16,9 @@ This is a base docker image for solutions created by the Turbonomic Integration 
 
 There are three flavors of this image, based on external canonical images.
 
-1. turbointegrations/base:<version>-alpine
-  * Based on [python:3.8-alpine](https://hub.docker.com/_/python)
-2. turbointegrations/base:<version>-slim-buster
-  * Based on [python:3.8-slim-buster](https://hub.docker.com/_/python)
-3. turbointegrations/base:<version>-rhel
-  * Based on [registry.access.redhat.com/ubi8/python-38](https://catalog.redhat.com/software/containers/ubi8/python-38/5dde9cacbed8bd164a0af24a)
+1. turbointegrations/base:`<version>`-alpine - Based on [python:3.8-alpine](https://hub.docker.com/_/python)
+2. turbointegrations/base:`<version>`-slim-buster - Based on [python:3.8-slim-buster](https://hub.docker.com/_/python)
+3. turbointegrations/base:`<version>`-rhel - Based on [registry.access.redhat.com/ubi8/python-38](https://catalog.redhat.com/software/containers/ubi8/python-38/5dde9cacbed8bd164a0af24a)
 
 ## Manual steps
 
