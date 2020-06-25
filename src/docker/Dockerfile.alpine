@@ -1,6 +1,6 @@
 FROM python:3.8-alpine
 
-COPY ./turbo_api_creds-1.1.0-py3-none-any.whl /tmp/turbo_api_creds-1.1.0-py3-none-any.whl
+COPY ./resources/turbo_api_creds-1.1.0-py3-none-any.whl /tmp/turbo_api_creds-1.1.0-py3-none-any.whl
 
 RUN apk add --no-cache --virtual .build-deps gcc musl-dev libffi-dev openssl-dev && \
     pip install /tmp/turbo_api_creds-1.1.0-py3-none-any.whl && \

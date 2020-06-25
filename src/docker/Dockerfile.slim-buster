@@ -1,6 +1,6 @@
 FROM python:3.8-slim-buster
 
-COPY ./turbo_api_creds-1.1.0-py3-none-any.whl /tmp/turbo_api_creds-1.1.0-py3-none-any.whl
+COPY ./resources/turbo_api_creds-1.1.0-py3-none-any.whl /tmp/turbo_api_creds-1.1.0-py3-none-any.whl
 
 RUN buildDeps='gcc' && \
     apt-get update && \
