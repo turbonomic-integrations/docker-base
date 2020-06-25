@@ -53,7 +53,7 @@ pipeline {
                 expression { env.FROM_VERSION != env.TO_VERSION }
             }
             steps {
-                ssh('''
+                sh('''
                     git config user.name 'JenkinsAutomation'
                     git config user.email 'ae-integration@turbonomic.com'
                     git add VERSION
