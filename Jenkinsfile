@@ -6,6 +6,7 @@ pipeline {
                 sh 'docker build -f src/docker/Dockerfile.alpine -t turbointegrations/base:alpine-build .'
                 sh 'docker build -f src/docker/Dockerfile.slim-buster -t turbointegrations/base:slim-buster-build .'
                 sh 'docker build -f src/docker/Dockerfile.rhel -t turbointegrations/base:rhel-build .'
+		sh 'bin/manifests.sh'
             }
         }
 
