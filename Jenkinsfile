@@ -3,6 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh 'git checkout $BRANCH_NAME'
                 load './VERSION'
                 script {
                     env.FROM_VERSION = "${MAJOR}.${MINOR}.${PATCH}"
@@ -59,8 +60,8 @@ pipeline {
                     git config user.email 'ae-integration@turbonomic.com'
                     git add VERSION
                     git add manifest.*
-                    git commit -m 'Jenkins automated release of $TO_VERSION'
-                    git tag -a $TO_VERSION -m 'Jenkins automated release of $TO_VERSION'
+                    git commit -m "Jenkins automated release of $TO_VERSION"
+                    git tag -a $TO_VERSION -m "Jenkins automated release of $TO_VERSION"
                 ''')
 
                 sshagent(['TurbonomicIntegrationsGitDeployKey']) {
