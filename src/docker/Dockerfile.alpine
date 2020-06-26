@@ -3,11 +3,13 @@ FROM python:3.8-alpine
 COPY ./resources/turbo_api_creds-1.1.0-py3-none-any.whl /tmp/turbo_api_creds-1.1.0-py3-none-any.whl
 
 RUN apk add --no-cache --virtual .build-deps gcc musl-dev libffi-dev openssl-dev && \
+    pip install --upgrade pip && \
     pip install /tmp/turbo_api_creds-1.1.0-py3-none-any.whl && \
-    pip install vmtconnect && \
-    pip install vmtplan && \
-    pip install umsg && \
+    pip install vmtconnect '>3.2,<4' && \
+    pip install vmtplan '>2.2,<3' && \
+    pip install umsg '>=1,<2' && \
     pip install dateutils && \
-    pip install pyyaml && \
+    pip install pyyaml '>5.3,<6' && \
+    pip cache purge && \
     apk del --no-network .build-deps && \
     rm -rf /tmp/*
