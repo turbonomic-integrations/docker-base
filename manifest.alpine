@@ -1,0 +1,20 @@
+python@sha256:c5623df482648cacece4f9652a0ae04b51576c93773ccd43ad459e2a195906dd
+Python 3.8.3
+pip 20.1.1 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
+certifi==2020.6.20
+cffi==1.14.0
+chardet==3.0.4
+cryptography==2.9.2
+dateutils==0.6.8
+idna==2.9
+pycparser==2.20
+python-dateutil==2.8.1
+pytz==2020.1
+PyYAML==5.3.1
+requests==2.24.0
+six==1.15.0
+turbo-api-creds @ file:///tmp/turbo_api_creds-1.1.0-py3-none-any.whl
+umsg==1.0.4
+urllib3==1.25.9
+vmtconnect==3.2.6
+vmtplan==2.2.1
