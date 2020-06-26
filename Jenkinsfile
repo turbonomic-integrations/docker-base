@@ -21,7 +21,7 @@ pipeline {
                 load './VERSION'
                 script {
                     env.TO_VERSION = "${MAJOR}.${MINOR}.${PATCH}"
-                    evn.TO_MAJMINVER = "${MAJOR}.${MINOR}"
+                    env.TO_MAJMINVER = "${MAJOR}.${MINOR}"
                     env.PROCEED = (env.FROM_VERSION != env.TO_VERSION || ! fileExists('previous-manifest.alpine'))
                 }
                 echo "Version increment ${env.FROM_VERSION} -> ${env.TO_VERSION}"
