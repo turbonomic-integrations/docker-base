@@ -21,6 +21,7 @@ pipeline {
                 load './VERSION'
                 script {
                     env.TO_VERSION = "${MAJOR}.${MINOR}.${PATCH}"
+                    evn.TO_MAJMINVER = "${MAJOR}.${MINOR}"
                     env.PROCEED = (env.FROM_VERSION != env.TO_VERSION || ! fileExists('previous-manifest.alpine'))
                 }
                 echo "Version increment ${env.FROM_VERSION} -> ${env.TO_VERSION}"
@@ -37,22 +38,22 @@ pipeline {
                     // Tag and push latest & alpine
                     sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:latest'
                     sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$TO_VERSION-alpine'
-                    sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$MAJOR.$MINOR-alpine'
+                    sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$TO_MAJMINVER-alpine'
                     sh 'docker push turbointegrations/base:latest'
                     sh 'docker push turbointegrations/base:$TO_VERSION-alpine'
-                    sh 'docker push turbointegrations/base:$MAJOR.$MINOR-alpine'
+                    sh 'docker push turbointegrations/base:$TO_MAJMINVER-alpine'
 
                     // Tag and push slim-buster
                     sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$TO_VERSION-slim-buster'
-                    sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$MAJOR.$MINOR-slim-buster'
+                    sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$TO_MAJMINVER-slim-buster'
                     sh 'docker push turbointegrations/base:$TO_VERSION-slim-buster'
-                    sh 'docker push turbointegrations/base:$MAJOR.$MINOR-slim-buster'
+                    sh 'docker push turbointegrations/base:$TO_MAJMINVER-slim-buster'
 
                     // Tag and push rhel
                     sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$TO_VERSION-rhel'
-                    sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$MAJOR.$MINOR-rhel'
+                    sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$TO_MAJMINVER-rhel'
                     sh 'docker push turbointegrations/base:$TO_VERSION-rhel'
-                    sh 'docker push turbointegrations/base:$MAJOR.$MINOR-rhel'
+                    sh 'docker push turbointegrations/base:$TO_MAJMINVER-rhel'
                 }
             }
         }
