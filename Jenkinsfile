@@ -60,7 +60,7 @@ pipeline {
                     git add VERSION
                     git add manifest.*
                     git commit -m 'Jenkins automated release of $TO_VERSION'
-                    git tag -a $TO_VERSION
+                    git tag -a $TO_VERSION -m 'Jenkins automated release of $TO_VERSION'
                 ''')
             }
         }
