@@ -8,11 +8,11 @@ RUN buildDeps='gcc' && \
     yum -y install $buildDeps && \
     pip install --upgrade pip && \
     pip install /tmp/turbo_api_creds-1.1.0-py3-none-any.whl && \
-    pip install vmtconnect '>3.2,<4' && \
-    pip install vmtplan '>2.2,<3' && \
-    pip install umsg '>=1,<2' && \
+    pip install 'vmtconnect>3.2,<4' && \
+    pip install 'vmtplan>2.2,<3' && \
+    pip install 'umsg>=1,<2' && \
     pip install dateutils && \
-    pip install pyyaml '>5.3,<6' && \
+    pip install 'pyyaml>5.3,<6' && \
     pip cache purge && \
     yum -y remove $buildDeps && \
     yum -y clean all --enablerepo='*' && \
