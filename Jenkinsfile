@@ -34,17 +34,17 @@ pipeline {
                     sh 'docker login -u $DHUSER -p $DHPASS'
                     // Tag and push latest & alpine
                     sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:latest'
-                    sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:${env.TO_VERSION}-alpine'
+                    sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$TO_VERSION-alpine'
                     sh 'docker push turbointegrations/base:latest'
-                    sh 'docker push turbointegrations/base:${env.TO_VERSION}-alpine'
+                    sh 'docker push turbointegrations/base:$TO_VERSION-alpine'
 
                     // Tag and push slim-buster
-                    sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:${env.TO_VERSION}-slim-buster'
-                    sh 'docker push turbointegrations/base:${env.TO_VERSION}-slim-buster'
+                    sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$TO_VERSION-slim-buster'
+                    sh 'docker push turbointegrations/base:$TO_VERSION-slim-buster'
 
                     // Tag and push rhel
-                    sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:${env.TO_VERSION}-rhel'
-                    sh 'docker push turbointegrations/base:${env.TO_VERSION}-rhel'
+                    sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$TO_VERSION-rhel'
+                    sh 'docker push turbointegrations/base:$TO_VERSION-rhel'
                 }
             }
         }
@@ -59,8 +59,8 @@ pipeline {
                     git config user.email 'ae-integration@turbonomic.com'
                     git add VERSION
                     git add manifest.*
-                    git commit -m 'Jenkins automated release of ${env.TO_VERSION}'
-                    git tag -a $env.TO_VERSION
+                    git commit -m 'Jenkins automated release of $TO_VERSION'
+                    git tag -a $TO_VERSION
                 ''')
             }
         }
