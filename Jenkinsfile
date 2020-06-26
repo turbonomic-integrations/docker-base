@@ -62,6 +62,15 @@ pipeline {
                     git commit -m 'Jenkins automated release of $TO_VERSION'
                     git tag -a $TO_VERSION -m 'Jenkins automated release of $TO_VERSION'
                 ''')
+
+                sshagent(['TurbonomicIntegrationsGitDeployKey']) {
+                    sh("""
+                      #!/usr/bin/env bash
+                      set +x
+                      export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                      git push origin $TO_VERSION
+                    """)
+                }
             }
         }
     }
