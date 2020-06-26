@@ -24,18 +24,17 @@ There are three flavors of this image, based on external canonical images.
 
 Given that there is one private module (turbo_api_creds), this must be downloaded manually by someone with permissions to the private BitBucket.
 
-In order to fetch this (and then later add it and check it in to this git repository), you can simply set your `username:password` as an environment variable named `bbcreds` then run the included `fetchwhl.sh`.
+In order to fetch this (and then later add it and check it in to this git repository), you can simply set your `username:password` as an environment variable named `bbcreds` then run the included `src/bash/fetchwhl.sh`.
 
 ```
+$ cd src/bash
 $ export bbcreds=username:password
 $ ./fetchwhl.sh
 ```
 
 ## Automated build
 
-(Future state) When new commits are pushed to master, a Jenkins workflow will be executed.
-
-(Current state) The Jenkins workflow must be manually triggered.
+The Jenkins workflow will be triggered nightly to build new images. A new image, with an automatically incremented semantic version number will be created if any changes are detected.
 
 The Jenkins workflow will;
 * Check out the master branch of the repository
