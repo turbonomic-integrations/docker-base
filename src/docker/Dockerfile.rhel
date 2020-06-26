@@ -13,7 +13,6 @@ RUN buildDeps='gcc' && \
     pip install 'umsg>=1,<2' && \
     pip install dateutils && \
     pip install 'pyyaml>5.3,<6' && \
-    pip cache purge && \
     yum -y remove $buildDeps && \
     yum -y clean all --enablerepo='*' && \
     rm -rf /tmp/*
