@@ -30,7 +30,7 @@ pipeline {
 
         stage('Publish') {
             when {
-                expression { env.PROCEED }
+                expression { env.PROCEED == true }
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DHPASS', usernameVariable: 'DHUSER')]) {
@@ -60,7 +60,7 @@ pipeline {
 
         stage('Commit') {
             when {
-                expression { env.PROCEED }
+                expression { env.PROCEED == true }
             }
             steps {
                 sh('''
