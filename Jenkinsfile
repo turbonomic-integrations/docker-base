@@ -12,9 +12,9 @@ pipeline {
                 load './VERSION'
                 script {
                     env.FROM_VERSION = "${MAJOR}.${MINOR}.${PATCH}"
-                }
-                flavors.split(',').each {
-                    sh "docker build -f src/docker/Dockerfile.${it} -t ${tag}:${it}-build ."
+                    flavors.split(',').each {
+                        sh "docker build -f src/docker/Dockerfile.${it} -t ${tag}:${it}-build ."
+                    }
                 }
             }
         }
@@ -45,14 +45,16 @@ pipeline {
                     sh "docker push ${tag}:latest"
 
                     // Tag and push all flavors
-                    flavors.split(',').each {
-                      sh "docker tag ${tag}:${it}-build ${tag}:$TO_VERSION-${it}"
-                      sh "docker tag ${tag}:${it}-build ${tag}:$TO_MAJMINVER-${it}"
-                      sh "docker tag ${tag}:${it}-build ${tag}:$MAJOR-${it}"
+                    script {
+                        flavors.split(',').each {
+                          sh "docker tag ${tag}:${it}-build ${tag}:$TO_VERSION-${it}"
+                          sh "docker tag ${tag}:${it}-build ${tag}:$TO_MAJMINVER-${it}"
+                          sh "docker tag ${tag}:${it}-build ${tag}:$MAJOR-${it}"
 
-                      sh "docker push ${tag}:$TO_VERSION-${it}"
-                      sh "docker push ${tag}:$TO_MAJMINVER-${it}"
-                      sh "docker push ${tag}:$MAJOR-${it}"
+                          sh "docker push ${tag}:$TO_VERSION-${it}"
+                          sh "docker push ${tag}:$TO_MAJMINVER-${it}"
+                          sh "docker push ${tag}:$MAJOR-${it}"
+                        }
                     }
                 }
             }
