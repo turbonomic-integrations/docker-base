@@ -26,7 +26,7 @@ pipeline {
                 script {
                     env.TO_VERSION = "${MAJOR}.${MINOR}.${PATCH}"
                     env.TO_MAJMINVER = "${MAJOR}.${MINOR}"
-                    env.PROCEED = (! fileExists('previous-manifest.alpine') || env.FROM_VERSION != env.TO_VERSION)
+                    PROCEED = (! fileExists('previous-manifest.alpine') || env.FROM_VERSION != env.TO_VERSION)
                 }
                 echo "Version increment ${env.FROM_VERSION} -> ${env.TO_VERSION}"
             }
@@ -34,7 +34,7 @@ pipeline {
 
         stage('Publish') {
             when {
-                expression { env.PROCEED == true }
+                expression { PROCEED }
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DHPASS', usernameVariable: 'DHUSER')]) {
@@ -62,7 +62,7 @@ pipeline {
 
         stage('Commit') {
             when {
-                expression { env.PROCEED == true }
+                expression { PROCEED }
             }
             steps {
                 sh('''
