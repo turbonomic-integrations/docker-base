@@ -15,6 +15,7 @@ pipeline {
                 }
                 flavors.split(',').each {
                     sh "docker build -f src/docker/Dockerfile.${it} -t ${tag}:${it}-build ."
+                }
             }
         }
 
