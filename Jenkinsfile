@@ -39,21 +39,27 @@ pipeline {
                     sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:latest'
                     sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$TO_VERSION-alpine'
                     sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$TO_MAJMINVER-alpine'
+                    sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$MAJOR-alpine'
                     sh 'docker push turbointegrations/base:latest'
                     sh 'docker push turbointegrations/base:$TO_VERSION-alpine'
                     sh 'docker push turbointegrations/base:$TO_MAJMINVER-alpine'
+                    sh 'docker push turbointegrations/base:$MAJOR-alpine'
 
                     // Tag and push slim-buster
                     sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$TO_VERSION-slim-buster'
                     sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$TO_MAJMINVER-slim-buster'
+                    sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$MAJOR-slim-buster'
                     sh 'docker push turbointegrations/base:$TO_VERSION-slim-buster'
                     sh 'docker push turbointegrations/base:$TO_MAJMINVER-slim-buster'
+                    sh 'docker push turbointegrations/base:$MAJOR-slim-buster'
 
                     // Tag and push rhel
                     sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$TO_VERSION-rhel'
                     sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$TO_MAJMINVER-rhel'
+                    sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$MAJOR-rhel'
                     sh 'docker push turbointegrations/base:$TO_VERSION-rhel'
                     sh 'docker push turbointegrations/base:$TO_MAJMINVER-rhel'
+                    sh 'docker push turbointegrations/base:$MAJOR-rhel'
                 }
             }
         }
