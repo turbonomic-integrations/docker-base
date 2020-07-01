@@ -1,3 +1,7 @@
+def tag="turbointegrations/base"
+def latest_flavor="alpine"
+def flavors="alpine,slim-buster,rhel"
+
 pipeline {
     agent any
     triggers { cron('0 0 * * *') }
@@ -9,9 +13,8 @@ pipeline {
                 script {
                     env.FROM_VERSION = "${MAJOR}.${MINOR}.${PATCH}"
                 }
-                sh 'docker build -f src/docker/Dockerfile.alpine -t turbointegrations/base:alpine-build .'
-                sh 'docker build -f src/docker/Dockerfile.slim-buster -t turbointegrations/base:slim-buster-build .'
-                sh 'docker build -f src/docker/Dockerfile.rhel -t turbointegrations/base:rhel-build .'
+                flavors.split(',').each {
+                    sh 'docker build -f src/docker/Dockerfile.${it} -t ${tag}:${it}-build .'
             }
         }
 
@@ -35,31 +38,21 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DHPASS', usernameVariable: 'DHUSER')]) {
                     sh 'docker login -u $DHUSER -p $DHPASS'
-                    // Tag and push latest & alpine
-                    sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:latest'
-                    sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$TO_VERSION-alpine'
-                    sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$TO_MAJMINVER-alpine'
-                    sh 'docker tag turbointegrations/base:alpine-build turbointegrations/base:$MAJOR-alpine'
-                    sh 'docker push turbointegrations/base:latest'
-                    sh 'docker push turbointegrations/base:$TO_VERSION-alpine'
-                    sh 'docker push turbointegrations/base:$TO_MAJMINVER-alpine'
-                    sh 'docker push turbointegrations/base:$MAJOR-alpine'
 
-                    // Tag and push slim-buster
-                    sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$TO_VERSION-slim-buster'
-                    sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$TO_MAJMINVER-slim-buster'
-                    sh 'docker tag turbointegrations/base:slim-buster-build turbointegrations/base:$MAJOR-slim-buster'
-                    sh 'docker push turbointegrations/base:$TO_VERSION-slim-buster'
-                    sh 'docker push turbointegrations/base:$TO_MAJMINVER-slim-buster'
-                    sh 'docker push turbointegrations/base:$MAJOR-slim-buster'
+                    // Tag and push latest
+                    sh 'docker tag ${tag}:${latest_flavor}-build ${tag}:latest'
+                    sh 'docker push ${tag}:latest'
 
-                    // Tag and push rhel
-                    sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$TO_VERSION-rhel'
-                    sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$TO_MAJMINVER-rhel'
-                    sh 'docker tag turbointegrations/base:rhel-build turbointegrations/base:$MAJOR-rhel'
-                    sh 'docker push turbointegrations/base:$TO_VERSION-rhel'
-                    sh 'docker push turbointegrations/base:$TO_MAJMINVER-rhel'
-                    sh 'docker push turbointegrations/base:$MAJOR-rhel'
+                    // Tag and push all flavors
+                    flavors.split(',').each {
+                      sh 'docker tag ${tag}:${it}-build ${tag}:$TO_VERSION-${it}'
+                      sh 'docker tag ${tag}:${it}-build ${tag}:$TO_MAJMINVER-${it}'
+                      sh 'docker tag ${tag}:${it}-build ${tag}:$MAJOR-${it}'
+
+                      sh 'docker push ${tag}:$TO_VERSION-${it}'
+                      sh 'docker push ${tag}:$TO_MAJMINVER-${it}'
+                      sh 'docker push ${tag}:$MAJOR-${it}'
+                    }
                 }
             }
         }
