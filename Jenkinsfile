@@ -67,7 +67,7 @@ pipeline {
             steps {
                 sh('''
                     git config user.name 'JenkinsAutomation'
-                    git config user.email 'ae-integration@turbonomic.com'
+                    git config user.email 'ae-integration@vmturbo.com'
                     git add VERSION
                     git add manifest.*
                     git commit -m "Jenkins automated release of $TO_VERSION"
