@@ -21,20 +21,73 @@ pipeline {
 
         stage('Version Increment Check') {
             steps {
-                sh 'bin/manifests.sh'
-                load './VERSION'
+                load "VERSION"
                 script {
-                    env.TO_VERSION = "${MAJOR}.${MINOR}.${PATCH}"
-                    env.TO_MAJMINVER = "${MAJOR}.${MINOR}"
-                    PROCEED = (! fileExists('previous-manifest.alpine') || env.FROM_VERSION != env.TO_VERSION)
+                    env.FROM_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+                    FIRST_RUN=(!fileExists("manifest.${latest_flavor}"))
+                    auto_versions = []
+                    if (!FIRST_RUN) {
+                        flavors.split(',').each {
+                            sh "mv manifest.${it} previous-manifest.${it}"
+                        }
+                    }
+
+                    flavors.split(',').each {
+                        base_tag = sh(returnStdout: true, script: "cat src/docker/Dockerfile.${it} | head -1").trim()
+                        base_tag = base_tag.split(' ').last()
+                        echo "Base Tag is ${base_tag}"
+                        // No idea why I can't simply redirect to manifest.${it} directly, but.. here we are
+                        base_sha = sh(returnStdout: true, script: "docker inspect --format='{{index .RepoDigests 0}}' ${base_tag}").trim()
+                        sh "echo ${base_sha} > manifest.${it}"
+                        sh "docker run --rm -i --entrypoint /bin/sh ${tag}:${it}-build -c \"python --version\" >> manifest.${it}"
+                        sh "docker run --rm -i --entrypoint /bin/sh ${tag}:${it}-build -c \"pip -V\" >> manifest.${it}"
+                        sh "docker run --rm -i --entrypoint /bin/sh ${tag}:${it}-build -c \"pip freeze\" >> manifest.${it}"
+                    }
+
+                    if (!FIRST_RUN) {
+                        flavors.split(',').each {
+                            prev_len = sh(returnStdout: true, script: "wc -l < previous-manifest.${it}") as Integer
+                            cur_len = sh(returnStdout: true, script: "wc -l < manifest.${it}") as Integer
+                            diff_out = sh(returnStatus: true, script: "diff previous-manifest.${it} manifest.${it}") as Integer
+
+                            if (prev_len > cur_len) {
+                                auto_versions << "MAJOR"
+                            } else if (prev_len < cur_len) {
+                                auto_versions << "MINOR"
+                            } else if (diff_out) {
+                                auto_versions << "PATCH"
+                            } else {
+                                auto_versions << "NONE"
+                            }
+                        }
+                        if (auto_versions.unique(false).size() > 1) {
+                            flavors.split(',').eachWithIndex { flavor, idx ->
+                                echo "${flavor} incremented: ${auto_versions[idx]}"
+                            }
+                            error "Detected different versioning increments for one or more images. This suggests that one of them is out of sync. Manual intervention required"
+                        }
+                        changetype = auto_versions.unique(false).first()
+                        switch(changetype) {
+                            case "MAJOR": MAJOR++; MINOR=0; PATCH=0; break;
+                            case "MINOR": MINOR++; PATCH=0; break;
+                            case "PATCH": PATCH++; break;
+                        }
+                        writeFile file: 'VERSION', text: """MAJOR=${MAJOR}
+MINOR=${MINOR}
+PATCH=${PATCH}"""
+                    }
+                    load "VERSION"
+                    env.TO_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+                    env.TO_MAJMINVER="${MAJOR}.${MINOR}"
+                    PROCEED = env.FROM_VERSION != env.TO_VERSION
                 }
-                echo "Version increment ${env.FROM_VERSION} -> ${env.TO_VERSION}"
+                echo "Version advancement ${env.FROM_VERSION} -> ${env.TO_VERSION}"
             }
         }
 
         stage('Publish') {
             when {
-                expression { PROCEED }
+                expression { FIRST_RUN || PROCEED }
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DHPASS', usernameVariable: 'DHUSER')]) {
@@ -62,7 +115,7 @@ pipeline {
 
         stage('Commit') {
             when {
-                expression { PROCEED }
+                expression { FIRST_RUN || PROCEED }
             }
             steps {
                 sh('''

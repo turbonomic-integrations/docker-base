@@ -1,13 +1,10 @@
 FROM python:3.8-slim-buster
 
-COPY ./resources/turbo_api_creds-1.1.0-py3-none-any.whl /tmp/turbo_api_creds-1.1.0-py3-none-any.whl
-
 RUN buildDeps='gcc' && \
     apt-get update && \
     apt-get install $buildDeps --no-install-recommends -y && \
     rm -rf /var/lib/apt/lists/* && \
     pip install --upgrade pip && \
-    pip install /tmp/turbo_api_creds-1.1.0-py3-none-any.whl && \
     pip install 'vmtconnect>3.2,<4' && \
     pip install 'vmtplan>2.2,<3' && \
     pip install 'umsg>=1,<2' && \
