@@ -1,6 +1,7 @@
 def tag="turbointegrations/base"
 def latest_flavor="alpine"
 def flavors="alpine,slim-buster,rhel"
+def tracked_modules=["vmtconnect","vmtplan","umsg","dateutils","pyyaml"]
 
 pipeline {
     agent any
@@ -13,7 +14,7 @@ pipeline {
                 script {
                     env.FROM_VERSION = "${MAJOR}.${MINOR}.${PATCH}"
                     flavors.split(',').each {
-                        sh "docker build -f src/docker/Dockerfile.${it} -t ${tag}:${it}-build ."
+                        sh "docker build --no-cache -f src/docker/Dockerfile.${it} -t ${tag}:${it}-build ."
                     }
                 }
             }
@@ -37,11 +38,19 @@ pipeline {
                         base_tag = base_tag.split(' ').last()
                         echo "Base Tag is ${base_tag}"
                         // No idea why I can't simply redirect to manifest.${it} directly, but.. here we are
-                        base_sha = sh(returnStdout: true, script: "docker inspect --format='{{index .RepoDigests 0}}' ${base_tag}").trim()
-                        sh "echo ${base_sha} > manifest.${it}"
-                        sh "docker run --rm -i --entrypoint /bin/sh ${tag}:${it}-build -c \"python --version\" >> manifest.${it}"
-                        sh "docker run --rm -i --entrypoint /bin/sh ${tag}:${it}-build -c \"pip -V\" >> manifest.${it}"
-                        sh "docker run --rm -i --entrypoint /bin/sh ${tag}:${it}-build -c \"pip freeze\" >> manifest.${it}"
+                        manifest = sh(returnStdout: true, script: "docker inspect --format='{{index .RepoDigests 0}}' ${base_tag}").trim()+'\n'
+                        manifest += sh(returnStdout: true, script: "docker run --rm -i --entrypoint /bin/sh ${tag}:${it}-build -c \"python --version\"").trim()+'\n'
+                        manifest += sh(returnStdout: true, script: "docker run --rm -i --entrypoint /bin/sh ${tag}:${it}-build -c \"pip -V\"").trim()+'\n'
+                        modules = sh(returnStdout: true, script: "docker run --rm -i --entrypoint /bin/sh ${tag}:${it}-build -c \"pip freeze\"").trim()
+
+                        inspect_modules = modules.split('\n').findAll { m ->
+                            tracked_modules.any { m.toLowerCase().contains(it) }
+                        }
+
+                        manifest += inspect_modules.join('\n')
+
+                        echo manifest
+                        writeFile file: "manifest.${it}", text: manifest
                     }
 
                     if (!FIRST_RUN) {
