@@ -1,7 +1,7 @@
 registry.access.redhat.com/ubi8/python-38@sha256:ee1b8357cba7f1b2c3c5bcc45c6edf83faf7a70c9ea33962efcec91ed3622695
 Python 3.8.0
 pip 20.2.2 from /opt/app-root/lib64/python3.8/site-packages/pip (python 3.8)
-dateutils==0.6.8
+dateutils==0.6.9
 PyYAML==5.3.1
 umsg==1.0.4
 vmtconnect==3.4.1
