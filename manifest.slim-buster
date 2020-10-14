@@ -4,5 +4,5 @@ pip 20.2.3 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
 dateutils==0.6.11
 PyYAML==5.3.1
 umsg==1.0.4
-vmtconnect==3.4.4
+vmtconnect==3.4.5
 vmtplan==2.3.0
