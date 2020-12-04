@@ -1,6 +1,6 @@
-python@sha256:9f5b3a12e3a9f7b2a96edde0a58b8620cdb94ed17d978403135ceca9cf0f0024
+python@sha256:4674633cb837b24f0a74919faf30465160da2bfdd110c2fd0d9f5095756f8090
 Python 3.8.6
-pip 20.2.4 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
+pip 20.3.1 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
 dateutils==0.6.12
 PyYAML==5.3.1
 umsg==1.0.4
