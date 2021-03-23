@@ -1,6 +1,6 @@
 FROM python:3.8-alpine
 
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev libffi-dev openssl-dev && \
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev libffi-dev openssl-dev rust cargo && \
     pip install --upgrade pip && \
     pip install 'vmtconnect>3.2,<4' && \
     pip install 'vmtplan>2.2,<3' && \
