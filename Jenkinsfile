@@ -128,7 +128,7 @@ PATCH=${PATCH}"""
             }
             steps {
                 sh('''
-                    git config user.name 'JenkinsAutomation'
+                    git config user.name 'ae-integration'
                     git config user.email 'ae-integration@vmturbo.com'
                     git add VERSION
                     git add manifest.*
