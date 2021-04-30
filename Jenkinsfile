@@ -1,10 +1,10 @@
 def tag="turbointegrations/base"
 def latest_flavor="alpine"
-def flavors="alpine,slim-buster,rhel"
+def flavors="alpine,slim-buster"
 def tracked_modules=["vmtconnect","vmtplan","umsg","dateutils","pyyaml"]
 
 pipeline {
-    agent { label 'linux && mavenpod' } 
+    agent { label 'linux && mavenpod' }
     triggers { cron('0 0 * * *') }
     stages {
         stage('Build') {
