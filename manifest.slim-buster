@@ -1,8 +1,8 @@
-python@sha256:1389669225e7fa05a9bac20d64551b6b6d84ee3200330d8d8de74c6d2314fdc7
-Python 3.8.8
-pip 21.0.1 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
+python@sha256:c9dc8cd1171771e7f0def12be61d7bb340480e73b4e78acf3464ed0c3347dabd
+Python 3.8.10
+pip 21.1.2 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
 dateutils==0.6.12
 PyYAML==5.4.1
 umsg==1.0.4
-vmtconnect==3.5.3
+vmtconnect==3.6.0
 vmtplan==2.3.0
