@@ -5,7 +5,7 @@ def tracked_modules=["vmtconnect","vmtplan","umsg","dateutils","pyyaml"]
 
 pipeline {
     agent { label 'linux && mavenpod' }
-    triggers { cron('H H(0-7) * * *') }
+    triggers { cron('H H(0-3) * * *') }
     stages {
         stage('Build') {
             steps {
